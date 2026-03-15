@@ -1,2 +1,2 @@
 # projeto-poo-atividades
-Atividades de poo, tanto valendo nota quanto também exercicios
+Exercicios e desafios feito por mim mesma para aprender de uma fez por todas POO (programação orientada ao odio)
