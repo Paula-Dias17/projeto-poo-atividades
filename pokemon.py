@@ -13,31 +13,44 @@ class Pet:
         self.estamina = estamina
 
     def status(self):
-        return str(f"Nome: {self.nome}\nEstamina: {self.estamina}\nVida: {self.vida}")
+        return str(f"\n     Nome: {self.nome}\n     Estamina: {self.estamina}\n     Vida: {self.vida}")
 
-    def ataque_normal(self):
-        print(f"{self.nome} bateu em seu oponente")
+    def ataque_normal(self, alvo):
+        print(f"\n{self.nome} bateu em {alvo.nome}")
         self.estamina -= 5
+        alvo.vida-= 5
+        print(f"\nO status do oponente é: {alvo.status()}")
+        print(f"Seu status é: {self.status()}")
 
-    def ataque_elementar(self, tipo, alvo):
-        if tipo == "Fogo" and alvo == "Planta":
+    def ataque_elementar(self, alvo):
+        bonus=0
+        if self.tipo == "Fogo" and alvo.tipo == "Planta":
             bonus= 10
-            return bonus
         
+        elif self.tipo == "Planta" and alvo.tipo =="Agua":
+            bonus=10
+
+        elif self.tipo=="Planta" and alvo.tipo == "Fogo":
+            bonus=-10
+
+        else:
+            bonus=0
+
+        alvo.vida -= 20 + bonus
         self.estamina -= 10
 
-    def ataque_defesa(self):
+    def ataque_defesa(self, alvo):
         self.estamina -= 15
 
-    def atacar(self, ataque):
+    def atacar(self, ataque, alvo):
         if ataque==1:
-            self.ataque_normal()
+            self.ataque_normal(alvo)
 
         elif ataque==2:
-            self.ataque_elementar()
+            self.ataque_elementar(alvo)
 
         elif ataque==3:
-            self.ataque_defesa()
+            self.ataque_defesa(alvo)
 
     def fugir(self):
         pass
@@ -68,16 +81,24 @@ class Pet_planta(Pet):
 pokemon1=Pet_fogo("Charizard", 30, 100)
 pokemon2=Pet_planta("bulbasaur", 40, 90)
 
+pokemons = [pokemon1, pokemon2]
 
-def batalha(atacante, defensor):
-    escolha=input("Você entrou em uma batalha! O que gostaria de fazer?\n   1.Digite: 'Atacar'  2.Digite: 'Fugir'   3.Digite'Capturar'\n")
+
+def batalha(atacante):
+    escolha=input("\nVocê entrou em uma batalha! O que gostaria de fazer?\n   1.Digite: 'Atacar'  2.Digite: 'Fugir'   3.Digite'Capturar'\n")
+    while True:
+        defensor= random.choice(pokemons)
+        if defensor == atacante:
+            defensor= random.choice(pokemons)
+        else:
+            break
 
     while True:
-        escolha= input("Seu pokemon ainda está em batalha! O que gostaria de fazer?\n   1.Digite: 'Atacar'  2.Digite: 'Fugir'   3.Digite'Capturar'\n")
+        if not escolha:
+            escolha= input("\nSeu pokemon ainda está em batalha! O que gostaria de fazer?\n   1.Digite: 'Atacar'  2.Digite: 'Fugir'   3.Digite'Capturar'\n")
         if escolha == 'Atacar':
-            ataque=int(input("Escolha seu ataque:\n     1.'ataque_normal'  2.'ataque_elementar'   3.'ataque_defesa'\n"))
-            atacante.atacar(ataque)
-            atacante
+            ataque=int(input("\nEscolha seu ataque:\n     1.'ataque_normal'  2.'ataque_elementar'   3.'ataque_defesa'\n"))
+            atacante.atacar(ataque, defensor)
 
 
 def menu():
@@ -89,7 +110,7 @@ def menu():
         atacante= pokemon2
 
     while True:
-        opcao=int(input("Olá treinador pokemon! Escolha oque deseja fazer nessa jornada!\n    1.Trocar pokemon    2.Batalhar      5.Sair\n"))
+        opcao=int(input("\nOlá treinador pokemon! Escolha oque deseja fazer nessa jornada!\n    1.Trocar pokemon    2.Batalhar      5.Sair\n"))
 
         if opcao==1:
             pokemon=int(input("Escolha seu pokemon!\n   1.Fogo  2.Planta\n"))
